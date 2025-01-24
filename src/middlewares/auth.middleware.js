@@ -1,0 +1,1 @@
+//check for access token or user's username in req and do next() if loged in and if not ,redirect to login page
