@@ -32,12 +32,14 @@ const GoogleLogin = asyncHandeler(async (req, res, next) => {
 const GoogleAuth = asyncHandeler(async (req, res) => {
   const { code } = req.query;
   if (!code) throw new apiError(500, "no code recieved for google auth");
-  const { tokens } = await client.getToken(code);
-  if (!tokens)
+  const { tokens } = await oauth2Client.refreshAccessToken();
+    if (!tokens)
     throw new apiError(500, "failed to fetch tokens from given code");
   console.log(tokens);
 
   client.setCredentials(tokens);
+
+  
 
     //fetch user info from google
 
@@ -55,7 +57,7 @@ const GoogleAuth = asyncHandeler(async (req, res) => {
 
     //check if user is already present in the database
 
-  const databaseUser=await User.findOne({
+  let databaseUser=await User.findOne({
     email: userInfo?.data?.email,
   });
 //if not create that user and store user access token in cookies and add user's username in req
@@ -64,22 +66,24 @@ const GoogleAuth = asyncHandeler(async (req, res) => {
     !databaseUser
   ) {
     databaseUser=await User.create({
-      name: userInfo?.name,
-      email: userInfo.email,
+      name: userInfo?.data.name,
+      email: userInfo?.data.email,
       idToken: tokens.id_token,
-      accessToken: tokens.access_token,
-      picture: userInfo.data.picture,
+      refresh_token: tokens.refresh_token,
+      picture: userInfo?.data.picture,
     });
   }
-  
-  cookieOption={
+  if(!databaseUser) throw new apiError(500,"user not created/found")
+  const cookieOption={
     secure:true,
     httpOnly:true,
   }
   
   
 
-  res.cookie("accessToken",tokens.access_token)
+  res.cookie("refresh_token",tokens.refresh_token,cookieOption)
+
+  res.redirect("http://localhost:3000/auth/googleverify")
 
 
 
