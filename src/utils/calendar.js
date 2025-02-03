@@ -48,3 +48,43 @@ export const createTask=asyncHandeler(async(req,res)=>{
     
 
 })
+
+export const getAllTasks=asyncHandeler(async(req,res)=>{
+    if(!req.client) throw new apiError(400,"client not recieved")
+        const calendar = google.calendar({ version: "v3", auth: req.client });
+    const now = new Date().toISOString();
+
+    const response = await calendar.events.list({
+      calendarId: "primary", 
+      timeMin: now, 
+      showDeleted: false, 
+      singleEvents: true, 
+      orderBy: "startTime",
+    });
+
+    if(!response) throw new apiError(500,"failed to load tasks")
+
+    const events = response?.data?.items;
+    if (!events) {
+      throw new apiError(500,"task list failed to load")
+    }
+
+    res.json(new apiResponse("task list fetched",200,events))
+})
+
+
+export const deleteTasks=asyncHandeler(async(req,res)=>{
+    if(!req.client) throw new apiError(400,"client not recieved")
+    const {eventId}= req.body;
+        const calendar = google.calendar({ version: "v3", auth: req.client });
+
+    const response = await calendar.events.delete({
+        calendarId: "primary",  
+        eventId: eventId,       // ID of the event to delete
+      });
+
+    if(!response) throw new apiError(500,"failed to delete the task")
+
+
+    res.json(new apiResponse("task deleted ",200))
+})

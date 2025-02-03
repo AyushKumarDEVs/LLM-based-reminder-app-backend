@@ -6,7 +6,7 @@ export const asyncHandeler = (asyncfx) => {
       await asyncfx(req, res, next);
     } catch (error) {
       console.log(error);
-      res.json(new apiError(500,error))
+      res.json(error)
     }
   };
 };

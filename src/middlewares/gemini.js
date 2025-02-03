@@ -32,6 +32,7 @@ export const LLM_Call= asyncHandeler(async (req,res,next)=>{
     console.log(response_f2)
 
     const data=JSON.parse(response_f2);
+    if(data.status===false) throw new apiError(400,"inproper request")
     console.log(data)
     req.task={
         title:data.title,
