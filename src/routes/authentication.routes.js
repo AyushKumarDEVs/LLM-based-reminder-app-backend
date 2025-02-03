@@ -1,13 +1,13 @@
-import express from "express"
-import {  GoogleAuth2 } from "../utils/google.auth.js";
+import express from "express";
+import { GoogleAuth2 } from "../utils/google.auth.js";
 import { verifyAuth } from "../middlewares/auth.middleware.js";
 
-const AuthRouter=express.Router();
+const AuthRouter = express.Router();
 
-AuthRouter.route("/GoogleLogin").get(GoogleAuth2.GoogleLogin)
+AuthRouter.route("/GoogleLogin").get(GoogleAuth2.GoogleLogin);
 
-AuthRouter.route("/google/auth").get(GoogleAuth2.GoogleAuth)
+AuthRouter.route("/google/auth").get(GoogleAuth2.GoogleAuth);
 
-AuthRouter.route("/googleverify").get(verifyAuth);
+AuthRouter.route("/verifyAuth").get(verifyAuth);
 
-export default AuthRouter
+export default AuthRouter;
