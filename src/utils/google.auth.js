@@ -26,9 +26,7 @@ const GoogleLogin = asyncHandeler(async (req, res, next) => {
     ],
   });
 
-  res.json({
-    url: authUrl,
-  });
+  res.redirect(authUrl)
 });
 
 const GoogleAuth = asyncHandeler(async (req, res) => {
@@ -79,7 +77,8 @@ const GoogleAuth = asyncHandeler(async (req, res) => {
   console.log("refreshToken=",tokens.refresh_token);
   res.cookie("refresh_token", tokens.refresh_token, cookieOption);
 
-  res.json(new apiResponse("loged in successfully", 200));///redirect to home page here
+  res.redirect(`${process.env.FRONTEND_DOMAIN}/home`);///redirect to home page here
+
 });
 
 export const GoogleAuth2 = {
