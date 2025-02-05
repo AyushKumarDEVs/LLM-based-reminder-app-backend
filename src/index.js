@@ -2,7 +2,6 @@ import dotenv from "dotenv"
 dotenv.config({
     path:".env"
 })
-
 import { connectToDB } from "./database/database.js"
 import startServer from "./app.js"
 
