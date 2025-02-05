@@ -67,7 +67,7 @@ app.use("/auth",AuthRouter)
 app.use("/task",taskRouter)
 
 export default function startServer() {
-  app.listen(process.env.PORT || 4000, () => {
+  app.listen(process.env.PORT, () => {
     console.log("server started");
   });
 }
