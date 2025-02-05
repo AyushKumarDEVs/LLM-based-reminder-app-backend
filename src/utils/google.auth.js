@@ -12,7 +12,7 @@ import { apiResponse } from "./apiResponse.js";
 const client = new google.Auth.OAuth2Client(
   process.env.CLIENT_ID,
   process.env.CLIENT_SECRET,
-  "http://localhost:3000/auth/google/auth"
+  `${process.env.BACKEND_DOMAIN}/auth/google/auth`
 );
 
 const GoogleLogin = asyncHandeler(async (req, res, next) => {
