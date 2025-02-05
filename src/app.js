@@ -18,6 +18,11 @@ app.use(cookieParser());
 
 
 app.get("/", (req, res) => {
+  res.send("Backend is running...");
+});
+
+
+app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
